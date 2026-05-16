@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Registration Form</title>
+  <style>
+    body { 
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background-image: url('/static/img/bg-1.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      margin: 40px 0 20px;
+      font-size: 36px;
+      color: #f1c40f;
+      text-align: center;
+      user-select: none;
+    }
+
+    .form-container {
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(10px);
+      padding: 30px 40px;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      max-width: 600px;
+      width: 100%;
+      color: #fff;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    form {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      width: 100%;
+      justify-content: center;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 500;
+      color: #f0f0f0;
+      font-size: 14px;
+    }
+
+    input, select, textarea {
+      width: 200px;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 10px;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      font-size: 14px;
+    }
+
+    input::placeholder {
+      color: #ddd;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    input[type="radio"] {
+      width: auto;
+      margin-right: 5px;
+    }
+
+    .radio-group {
+      margin-bottom: 15px;
+      width: 100%;
+      text-align: center;
+      color: #f0f0f0;
+    }
+
+    .radio-group label {
+      display: inline-block;
+      margin-right: 15px;
+      font-weight: normal;
+      color: #f0f0f0;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #f1c40f;
+      color: #000;
+      font-weight: bold;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      max-width: 200px;
+      margin: 0 auto;
+      display: block;
+    }
+
+    button:hover {
+      background-color: #d4ac0d;
+    }
+  </style>
+</head>
+<body>
+  <h1>Registration</h1>
+  <div class="form-container">
+    <form method="post" enctype="multipart/form-data">
+      
+      {% csrf_token %}
+      
+      <div>
+        <label for="Name">Name</label>
+        <input type="text" id="Name" name="Name" placeholder="Enter your name" required />
+      </div>
+
+      <div>
+        <label for="Age">Age</label>
+        <input type="number" id="Age" name="Age" placeholder="Enter your age" required />
+      </div>
+
+      <div class="radio-group">
+        <label>Gender</label><br />
+        <input type="radio" id="male" name="Gender" value="male" required />
+        <label for="male">Male</label>
+        <input type="radio" id="female" name="Gender" value="female" required />
+        <label for="female">Female</label>
+        <input type="radio" id="other" name="Gender" value="other" required />
+        <label for="other">Other</label>
+      </div>
+
+      <div>
+        <label for="phone_no">Phone No</label>
+        <input type="tel" id="phone_no" name="phone_no" placeholder="Enter your phone number" required />
+      </div>
+
+      <div>
+        <label for="state">State</label>
+        <select id="state" name="state" required>
+          <option value="">--Select State--</option>
+          <option value="Kerala">Kerala</option>
+          <option value="Tamil Nadu">Tamil Nadu</option>
+          <option value="Karnataka">Karnataka</option>
+          <option value="Maharashtra">Maharashtra</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="profileimage">Profile Image</label>
+        <input type="file" id="profileimage" name="image" accept="image/*" />
+      </div>
+
+      <div>
+        <label for="licenceno">License Number</label>
+        <input type="text" id="licenceno" name="licenceno" placeholder="Enter your license number" required />
+      </div>
+
+      <div>
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email" required />
+      </div>
+
+      <div>
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Enter your password" required />
+      </div>
+
+      <button type="submit">Register</button>
+    </form>
+  </div>
+
+  <!-- ✅ Validation Script -->
+  <script>
+    document.querySelector("form").addEventListener("submit", function(e) {
+      const name = document.getElementById("Name").value.trim();
+      const age = parseInt(document.getElementById("Age").value.trim());
+      const phone = document.getElementById("phone_no").value.trim();
+      const licence = document.getElementById("licenceno").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      const namePattern = /^[A-Za-z\s]+$/;
+      const licencePattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]+$/;
+      const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+      if (!namePattern.test(name)) {
+        alert("Name must contain only alphabets.");
+        e.preventDefault();
+        return;
+      }
+
+      if (isNaN(age) || age < 22 || age > 50) {
+        alert("Age must be a number between 22 and 50.");
+        e.preventDefault();
+        return;
+      }
+
+      if (!/^\d{10}$/.test(phone)) {
+        alert("Phone number must contain exactly 10 digits.");
+        e.preventDefault();
+        return;
+      }
+
+      if (!licencePattern.test(licence)) {
+        alert("License number must include both letters and numbers.");
+        e.preventDefault();
+        return;
+      }
+
+      if (!email.includes("@")) {
+        alert("Email must contain '@' symbol.");
+        e.preventDefault();
+        return;
+      }
+
+      if (!passwordPattern.test(password)) {
+        alert("Password must contain at least 8 characters including letters, numbers, and special characters.");
+        e.preventDefault();
+        return;
+      }
+    });
+  </script>
+</body>
+</html>

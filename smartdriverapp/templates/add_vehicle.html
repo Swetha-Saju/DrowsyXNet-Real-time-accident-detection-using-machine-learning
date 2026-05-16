@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Vehicle</title>
+  <style>
+    body { 
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background-image: url('/static/img/bg-1.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h2 {
+      margin: 40px 0 20px;
+      font-size: 36px;
+      color: #f1c40f;
+      text-align: center;
+      user-select: none;
+    }
+
+    form {
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(10px);
+      padding: 30px 40px;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      max-width: 600px;
+      width: 100%;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 500;
+      color: #f0f0f0;
+      font-size: 14px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 10px;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      font-size: 14px;
+    }
+
+    input::placeholder {
+      color: #ddd;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #f1c40f;
+      color: #000;
+      font-weight: bold;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      max-width: 200px;
+      margin: 0 auto;
+      display: block;
+    }
+
+    button:hover {
+      background-color: #d4ac0d;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Add New Vehicle</h2>
+
+<form method="POST" enctype="multipart/form-data" onsubmit="return validateVehicleForm()">
+  {% csrf_token %}
+
+  <label for="vehicle_number">Vehicle Number</label>
+  <input type="text" id="vehicle_number" name="vehicle_number" placeholder="Enter vehicle number" required>
+
+  <label for="vehicle_name">Vehicle Name</label>
+  <input type="text" id="vehicle_name" name="vehicle_name" placeholder="Enter vehicle name" required>
+
+  <label for="vehicle_type">Vehicle Type</label>
+  <select id="vehicle_type" name="vehicle_type" required>
+      <option value="">--Select Type--</option>
+      <option value="Taxi">Taxi</option>
+      <option value="Truck">Truck</option>
+      <option value="Other">Other</option>
+  </select>
+
+  <label for="capacity">Capacity</label>
+  <input type="number" id="capacity" name="capacity" min="1" placeholder="Enter capacity" required>
+
+  <label for="status">Status</label>
+  <select id="status" name="status" required>
+      <option value="Active">Active</option>
+      <option value="Inactive">Inactive</option>
+      <option value="Maintenance">Maintenance</option>
+  </select>
+
+  <label for="vehicle_image">Vehicle Image</label>
+  <input type="file" id="vehicle_image" name="vehicle_image" accept="image/*">
+
+  <button type="submit">Add Vehicle</button>
+</form>
+
+<script>
+function validateVehicleForm() {
+  const vehicleNumber = document.getElementById("vehicle_number").value.trim();
+  const vehicleName = document.getElementById("vehicle_name").value.trim();
+  const vehicleType = document.getElementById("vehicle_type").value;
+  const capacity = document.getElementById("capacity").value.trim();
+  const status = document.getElementById("status").value;
+
+  const vehicleNumberPattern = /^[A-Za-z0-9]+$/;
+  if (!vehicleNumberPattern.test(vehicleNumber)) {
+      alert("Vehicle number must include only letters and numbers (no special characters).");
+      return false;
+  }
+
+  const namePattern = /^[A-Za-z\s]+$/;
+  if (!namePattern.test(vehicleName)) {
+      alert("Vehicle name must contain only letters.");
+      return false;
+  }
+
+  if (vehicleType === "") {
+      alert("Please select a vehicle type.");
+      return false;
+  }
+
+  if (capacity === "" || isNaN(capacity) || Number(capacity) < 1) {
+      alert("Please enter a valid capacity greater than 0.");
+      return false;
+  }
+
+  if (status === "") {
+      alert("Please select a status.");
+      return false;
+  }
+
+  if (vehicleType === "Taxi" && Number(capacity) !<= 5) {
+      alert("Taxi must have a capacity of exactly 5 persons.");
+      return false;
+  }
+
+  if (vehicleType === "Truck" && Number(capacity) !<= 2) {
+      alert("Truck must have a capacity of exactly 2 persons.");
+      return false;
+  }
+
+  if (!vehicleNumber || !vehicleName || !vehicleType || !capacity || !status) {
+      alert("Please fill all required fields before submitting.");
+      return false;
+  }
+
+  return true;
+}
+</script>
+
+</body>
+</html>

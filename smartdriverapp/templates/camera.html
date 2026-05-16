@@ -1,0 +1,36 @@
+<video id="video" autoplay playsinline width="640" height="480"></video>
+
+<p>Eye: <span id="eye">Detecting...</span></p>
+<p>Mouth: <span id="mouth">Detecting...</span></p>
+
+<script>
+async function startCam() {
+    const stream = await navigator.mediaDevices.getUserMedia({video: true});
+    document.getElementById("video").srcObject = stream;
+}
+startCam();
+
+function captureAndSend() {
+    const video = document.getElementById("video");
+    const canvas = document.createElement("canvas");
+    canvas.width = 640;
+    canvas.height = 480;
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    const imgData = canvas.toDataURL("image/jpeg");
+
+    fetch("/detect_face/", {
+        method: "POST",
+        body: JSON.stringify({ image: imgData }),
+        headers: {"Content-Type": "application/json"}
+    })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById("eye").innerText = data.eye.toUpperCase();
+        document.getElementById("mouth").innerText = data.mouth.toUpperCase();
+    });
+}
+
+setInterval(captureAndSend, 300); // every 0.3 sec
+</script>

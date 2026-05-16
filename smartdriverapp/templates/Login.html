@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Taxi Login Page</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background-image: url('/static/img/bg-1.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .form-container {
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(10px);
+      padding: 40px 50px;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      max-width: 400px;
+      width: 100%;
+      color: #fff;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 28px;
+      color: #f1c40f;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #f0f0f0;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: none;
+      border-radius: 10px;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      font-size: 14px;
+    }
+
+    input::placeholder {
+      color: #ddd;
+    }
+
+    input:focus {
+      outline: none;
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #f1c40f;
+      color: #000;
+      font-weight: bold;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #d4ac0d;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <form method="post">
+      {% csrf_token %}
+      <h1>LOGIN PAGE</h1>
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="Enter your email" required />
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="Enter your password" required />
+
+      <button type="submit">LOGIN</button>
+    </form>
+  </div>
+
+  <!-- ✅ Validation Script (No changes to your HTML above) -->
+  <script>
+    document.querySelector("form").addEventListener("submit", function(e) {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      // Email must contain '@'
+      if (!email.includes("@")) {
+        alert("Email must contain '@' symbol.");
+        e.preventDefault();
+        return;
+      }
+
+      // Password must include both letters and numbers
+      const hasLetter = /[A-Za-z]/.test(password);
+      const hasNumber = /\d/.test(password);
+
+      if (!(hasLetter && hasNumber)) {
+        alert("Password must include both letters and numbers.");
+        e.preventDefault();
+        return;
+      }
+
+      // Password must be less than 8 characters
+      if (password.length <= 8) {
+        alert("Password length must be greater than 8 characters.");
+        e.preventDefault();
+        return;
+      }
+    });
+  </script>
+</body>
+</html>

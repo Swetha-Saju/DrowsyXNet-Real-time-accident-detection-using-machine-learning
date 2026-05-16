@@ -1,0 +1,204 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Profile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: url('{% static "img/bg-1.jpg" %}') no-repeat center center / cover;
+            z-index: -1;
+            filter: blur(6px) brightness(0.7);
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 40px 30px;
+            border-radius: 16px;
+            width: 95%;
+            max-width: 550px;
+            margin: 60px auto;
+            color: #fff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            animation: fadeIn 1s ease forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 26px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 6px;
+            font-size: 14px;
+            color: #eaeaea;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="number"],
+        input[type="file"],
+        input[type="password"],
+        select {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: none;
+            border-radius: 8px;
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn-submit {
+            background: linear-gradient(to right, #4CAF50, #43A047);
+            color: white;
+            margin-bottom: 12px;
+        }
+
+        .btn-submit:hover {
+            background: linear-gradient(to right, #43A047, #388E3C);
+        }
+
+        .btn-cancel {
+            background: linear-gradient(to right, #f44336, #e53935);
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-cancel:hover {
+            background: linear-gradient(to right, #e53935, #d32f2f);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Edit Profile</h2>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="Name">Name</label>
+                <input type="text" id="Name" name="Name" value="{{ client.name }}">
+            </div>
+
+            <div class="form-group">
+                <label for="Age">Age</label>
+                <input type="number" id="Age" name="Age" value="{{ client.age }}">
+            </div>
+
+            <div class="form-group">
+                <label for="Gender">Gender</label>
+                <select id="Gender" name="Gender">
+                    <option value="">Select Gender</option>
+                    <option value="M" {% if client.gender == "M" %}selected{% endif %}>Male</option>
+                    <option value="F" {% if client.gender == "F" %}selected{% endif %}>Female</option>
+                    <option value="O" {% if client.gender == "O" %}selected{% endif %}>Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="phone_no">Phone Number</label>
+                <input type="number" id="phone_no" name="phone_no" value="{{ client.phone_no }}">
+            </div>
+
+            <div class="form-group">
+                <label for="state">State</label>
+                <select id="state" name="state">
+                    <option value="">Select State</option>
+                    <option value="K" {% if client.state == "K" %}selected{% endif %}>Kerala</option>
+                    <option value="T" {% if client.state == "T" %}selected{% endif %}>Tamil Nadu</option>
+                    <option value="O" {% if client.state == "O" %}selected{% endif %}>Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="image">Profile Image</label>
+                <input type="file" id="image" name="image">
+            </div>
+
+            <div class="form-group">
+                <label for="licenceno">licenceno</label>
+                <input type="text" id="licenceno" name="licenceno">
+            </div>
+ 
+
+            <div class="form-group">
+                <label for="email">Email (cannot change)</label>
+                <input type="email" id="email" name="email" value="{{ client.email }}" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" value="{{ client.password }}">
+            </div>
+
+
+            <!-- Submit and Cancel Buttons -->
+            <button type="submit" class="btn btn-submit">Update Profile</button>
+        </form>
+
+        <!-- Cancel button outside the form -->
+        <a href="{% url 'profile' %}" class="btn btn-cancel">Cancel</a>
+        <!-- Replace 'profile' with the correct URL name -->
+    </div>
+
+</body>
+</html>

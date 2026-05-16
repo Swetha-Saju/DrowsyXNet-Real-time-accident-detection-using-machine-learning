@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Driver</title>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background-image: url('/static/img/bg-1.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    form {
+      background: rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(15px);
+      padding: 40px 50px;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      max-width: 400px; /* ✅ reduced from 550px to 400px */
+      width: 90%; /* ✅ ensures responsiveness */
+      color: #fff;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 28px;
+      color: #f1c40f;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #f0f0f0;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 18px;
+      border: none;
+      border-radius: 10px;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      font-size: 14px;
+    }
+
+    input::placeholder, textarea::placeholder {
+      color: #ddd;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #f1c40f;
+      color: #000;
+      font-weight: bold;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #d4ac0d;
+    }
+  </style>
+</head>
+
+<body>
+  <form method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
+    {% csrf_token %}
+    <h2>Add New Driver</h2>
+
+    <label for="name">Driver Name</label>
+    <input type="text" id="name" name="name" required>
+
+    <label for="photo">Profile Photo</label>
+    <input type="file" id="photo" name="photo" accept="image/*" required>
+
+    <label for="license">License Number</label>
+    <input type="text" id="license" name="license" required>
+
+    <label for="phone">Phone Number</label>
+    <input type="text" id="phone" name="phone" placeholder="Enter 10-digit number" required>
+
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" placeholder="example@mail.com">
+
+    <label for="address">Address</label>
+    <textarea id="address" name="address" rows="3" placeholder="Enter full address"></textarea>
+
+    <label for="experience">Experience (Years)</label>
+    <input type="number" id="experience" name="experience" min="0" max="50">
+
+    <label for="status">Status</label>
+    <select id="status" name="status">
+      <option value="Active">Active</option>
+      <option value="Inactive">Inactive</option>
+      <option value="Suspended">Suspended</option>
+    </select>
+
+    <button type="submit">Add Driver</button>
+  </form>
+
+  <script>
+    function validateForm() {
+      const name = document.getElementById("name").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const experience = document.getElementById("experience").value.trim();
+      const license = document.getElementById("license").value.trim();
+      const photo = document.getElementById("photo").value.trim();
+
+      const namePattern = /^[A-Za-z\s]+$/;
+      if (!namePattern.test(name)) {
+        alert("Name must contain only alphabets (no numbers or symbols).");
+        return false;
+      }
+
+      const phonePattern = /^[0-9]{10}$/;
+      if (!phonePattern.test(phone)) {
+        alert("Phone number must be exactly 10 digits and contain only numbers.");
+        return false;
+      }
+
+      if (!email.includes("@")) {
+        alert("Please enter a valid email address containing '@'.");
+        return false;
+      }
+
+      if (experience === "" || isNaN(experience) || Number(experience) <= 1) {
+        alert("Experience must be greater than 1 year.");
+        return false;
+      }
+
+      if (!name || !photo || !license || !phone || !email || !experience) {
+        alert("Please complete all required fields before submitting.");
+        return false;
+      }
+
+      return true;
+    }
+  </script>
+</body>
+</html>
